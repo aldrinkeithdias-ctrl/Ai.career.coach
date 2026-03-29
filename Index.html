@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aldrin · AI Career Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Geist+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–bg: #0a0a0a;
+–surface: #111111;
+–border: #222222;
+–gold: #C9A84C;
+–gold-lt: #E8C97A;
+–gold-dim: rgba(201,168,76,0.15);
+–white: #F0EDE6;
+–gray: #666660;
+–radius: 4px;
+}
+
+html, body {
+height: 100%;
+background: var(–bg);
+color: var(–white);
+font-family: ‘Geist Mono’, monospace;
+-webkit-font-smoothing: antialiased;
+overflow-x: hidden;
+}
+
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image:
+linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+background-size: 48px 48px;
+pointer-events: none;
+z-index: 0;
+}
+
+body::after {
+content: ‘’;
+position: fixed;
+top: 0; left: 50%;
+transform: translateX(-50%);
+width: 600px; height: 500px;
+background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%);
+pointer-events: none;
+z-index: 0;
+}
+
+.wrapper {
+position: relative;
+z-index: 1;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 60px 24px 80px;
+max-width: 480px;
+margin: 0 auto;
+}
+
+.avatar-ring {
+position: relative;
+width: 88px;
+height: 88px;
+margin-bottom: 24px;
+animation: fadeUp 0.6s ease both;
+}
+
+.avatar-ring svg {
+position: absolute;
+inset: 0;
+animation: spinSlow 20s linear infinite;
+}
+
+.avatar-inner {
+position: absolute;
+inset: 10px;
+background: var(–surface);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid var(–border);
+}
+
+.avatar-a {
+font-family: ‘Big Shoulders Display’, sans-serif;
+font-size: 38px;
+font-weight: 900;
+color: var(–gold);
+line-height: 1;
+letter-spacing: -1px;
+}
+
+.handle {
+font-family: ‘Geist Mono’, monospace;
+font-size: 11px;
+font-weight: 300;
+letter-spacing: 0.2em;
+color: var(–gold);
+text-transform: uppercase;
+margin-bottom: 8px;
+animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.name {
+font-family: ‘Big Shoulders Display’, sans-serif;
+font-size: 42px;
+font-weight: 900;
+line-height: 0.95;
+letter-spacing: -1px;
+color: var(–white);
+text-align: center;
+margin-bottom: 12px;
+animation: fadeUp 0.6s 0.15s ease both;
+}
+
+.tagline {
+font-family: ‘Instrument Serif’, serif;
+font-style: italic;
+font-size: 15px;
+color: var(–gray);
+text-align: center;
+line-height: 1.5;
+max-width: 300px;
+margin-bottom: 40px;
+animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.divider {
+width: 100%;
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 32px;
+animation: fadeUp 0.6s 0.25s ease both;
+}
+
+.divider::before, .divider::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–border), transparent);
+}
+
+.divider span {
+font-size: 10px;
+letter-spacing: 0.25em;
+color: var(–gray);
+text-transform: uppercase;
+white-space: nowrap;
+}
+
+.links {
+width: 100%;
+display: flex;
+flex-direction: column;
+gap: 14px;
+}
+
+.link-card {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 18px 20px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+text-decoration: none;
+color: var(–white);
+position: relative;
+overflow: hidden;
+transition: border-color 0.25s, transform 0.2s;
+cursor: pointer;
+}
+
+.link-card::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(90deg, var(–gold-dim), transparent);
+opacity: 0;
+transition: opacity 0.25s;
+}
+
+.link-card:hover {
+border-color: var(–gold);
+transform: translateX(4px);
+}
+
+.link-card:hover::before { opacity: 1; }
+
+.link-card.featured {
+border-color: rgba(201,168,76,0.4);
+background: linear-gradient(135deg, #151200, var(–surface));
+}
+
+.link-card.featured::after {
+content: ‘GET IT NOW’;
+position: absolute;
+top: 10px; right: 14px;
+font-size: 9px;
+font-weight: 400;
+letter-spacing: 0.15em;
+color: var(–gold);
+border: 1px solid rgba(201,168,76,0.4);
+padding: 2px 7px;
+border-radius: 2px;
+}
+
+.link-icon {
+width: 36px;
+height: 36px;
+background: var(–gold-dim);
+border: 1px solid rgba(201,168,76,0.2);
+border-radius: var(–radius);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+font-size: 16px;
+position: relative;
+z-index: 1;
+}
+
+.link-content {
+flex: 1;
+position: relative;
+z-index: 1;
+}
+
+.link-title {
+font-family: ‘Big Shoulders Display’, sans-serif;
+font-size: 17px;
+font-weight: 700;
+letter-spacing: 0.02em;
+color: var(–white);
+line-height: 1.2;
+margin-bottom: 3px;
+}
+
+.link-sub {
+font-size: 10px;
+font-weight: 300;
+letter-spacing: 0.1em;
+color: var(–gray);
+text-transform: uppercase;
+}
+
+.link-arrow {
+color: var(–gold);
+font-size: 18px;
+opacity: 0.6;
+transition: opacity 0.2s, transform 0.2s;
+position: relative;
+z-index: 1;
+}
+
+.link-card:hover .link-arrow {
+opacity: 1;
+transform: translateX(3px);
+}
+
+.link-card:nth-child(1) { animation: fadeUp 0.5s 0.3s ease both; }
+.link-card:nth-child(2) { animation: fadeUp 0.5s 0.4s ease both; }
+.link-card:nth-child(3) { animation: fadeUp 0.5s 0.5s ease both; }
+
+.stats {
+width: 100%;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 1px;
+background: var(–border);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+overflow: hidden;
+margin-top: 40px;
+animation: fadeUp 0.5s 0.6s ease both;
+}
+
+.stat {
+background: var(–surface);
+padding: 16px 12px;
+text-align: center;
+}
+
+.stat-num {
+font-family: ‘Big Shoulders Display’, sans-serif;
+font-size: 24px;
+font-weight: 900;
+color: var(–gold);
+line-height: 1;
+margin-bottom: 4px;
+}
+
+.stat-label {
+font-size: 9px;
+letter-spacing: 0.15em;
+color: var(–gray);
+text-transform: uppercase;
+}
+
+.footer {
+margin-top: 48px;
+font-size: 10px;
+letter-spacing: 0.15em;
+color: #333;
+text-transform: uppercase;
+animation: fadeUp 0.5s 0.7s ease both;
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(16px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spinSlow {
+from { transform: rotate(0deg); }
+to   { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+<body>
+<div class="wrapper">
+
+ <!-- Avatar -->
+
+ <div class="avatar-ring">
+   <svg viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <circle cx="44" cy="44" r="40" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 6" stroke-linecap="round"/>
+   </svg>
+   <div class="avatar-inner">
+     <span class="avatar-a">A</span>
+   </div>
+ </div>
+
+ <p class="handle">@ai.careermentor</p>
+ <h1 class="name">AI CAREER<br>COACH</h1>
+ <p class="tagline">Land your next role using AI prompts recruiters actually respond to</p>
+
+ <div class="divider"><span>grab your tools</span></div>
+
+ <div class="links">
+
+   <a href="https://aldrious.gumroad.com/l/kaksvo" target="_blank" class="link-card featured">
+     <div class="link-icon">🎁</div>
+     <div class="link-content">
+       <div class="link-title">AI Resume Prompt Pack</div>
+       <div class="link-sub">AI prompts that get recruiter callbacks</div>
+     </div>
+     <div class="link-arrow">→</div>
+   </a>
+
+   <a href="https://aldrious.gumroad.com/l/mktelr" target="_blank" class="link-card">
+     <div class="link-icon">⚡</div>
+     <div class="link-content">
+       <div class="link-title">LinkedIn AI Prompt Kit</div>
+       <div class="link-sub">Get recruiters sliding into your DMs</div>
+     </div>
+     <div class="link-arrow">→</div>
+   </a>
+
+   <a href="https://www.instagram.com/ai.careermentor" target="_blank" class="link-card">
+     <div class="link-icon">📲</div>
+     <div class="link-content">
+       <div class="link-title">Follow on Instagram</div>
+       <div class="link-sub">Daily AI career strategy</div>
+     </div>
+     <div class="link-arrow">→</div>
+   </a>
+
+ </div>
+
+ <div class="stats">
+   <div class="stat">
+     <div class="stat-num">1.9K</div>
+     <div class="stat-label">Monthly Views</div>
+   </div>
+   <div class="stat">
+     <div class="stat-num">AI</div>
+     <div class="stat-label">Powered</div>
+   </div>
+   <div class="stat">
+     <div class="stat-num">60s</div>
+     <div class="stat-label">Resume Fix</div>
+   </div>
+ </div>
+
+ <p class="footer">ai.careermentor · ai-powered job strategy</p>
+
+</div>
+</body>
+</html>
